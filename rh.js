@@ -1,7 +1,7 @@
 import { db } from "./firebase.js";
 import { ref, onValue, update } from 
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
+ 
 onValue(ref(db, "pedidos"), snap => {
   lista.innerHTML = "";
 
