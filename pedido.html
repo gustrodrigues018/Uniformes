@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pedido de Uniforme</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <h1>Pedido de Uniforme</h1>
+</header>
+
+<div class="container">
+  <form id="formPedido">
+    <input id="nome" placeholder="Nome completo" required>
+    <input id="cargo" placeholder="Cargo" required>
+    <input id="matricula" placeholder="Matrícula" required>
+
+    <select id="uniforme">
+      <option>Camisa Leroy Merlin</option>
+      <option>Jaqueta Leroy Merlin</option>
+      <option>Calça</option>
+      <option>Bota</option>
+    </select>
+
+    <select id="tamanho">
+      <option>P</option>
+      <option>M</option>
+      <option>G</option>
+      <option>GG</option>
+    </select>
+
+    <input id="quantidade" type="number" placeholder="Quantidade" required>
+    <textarea id="observacoes" placeholder="Observações"></textarea>
+
+    <button type="submit">Enviar pedido</button>
+  </form>
+</div>
+
+<script type="module" src="js/pedido.js"></script>
+</body>
+</html>
