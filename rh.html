@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Pedidos RH</title>
+</head>
+<body>
+
+<h2>Pedidos de EPI</h2>
+<ul id="lista"></ul>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  updateDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH",
+  projectId: "SEU_PROJECT_ID",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const lista = document.getElementById("lista");
+
+onSnapshot(collection(db, "pedidos-epis"), (snap) => {
+  lista.innerHTML = "";
+  snap.forEach((d) => {
+    const p = d.data();
+    lista.innerHTML += `
+      <li>
+        <b>${p.nome}</b> - ${p.epi} (${p.quantidade})<br>
+        Status: ${p.status}
+        ${
+          p.status === "Em análise"
+            ? `<button onclick="aprovar('${d.id}')">Aprovar</button>`
+            : ""
+        }
+      </li>
+    `;
+  });
+});
+
+window.aprovar = async (id) => {
+  await updateDoc(doc(db, "pedidos-epis", id), {
+    status: "Aprovado",
+    aprovadoEm: new Date()
+  });
+};
+</script>
+</body>
+</html>
