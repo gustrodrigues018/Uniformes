@@ -3,36 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <title>Status do Pedido</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 40px;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,.1);
+    }
+    h2 {
+      text-align: center;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2>Status do seu pedido</h2>
-<div id="status">Carregando...</div>
+<div class="card">
+  <h2>Status do seu pedido</h2>
+  <div id="status">Carregando...</div>
+</div>
 
 <script type="module">
-  // Firebase
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
   import {
-    getFirestore,
-    doc,
-    onSnapshot
-  } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+    getDatabase,
+    ref,
+    onValue
+  } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-  // 🔥 SUA configuração real
   const firebaseConfig = {
     apiKey: "AIzaSyD-637RqGj1lk9Bdgz5n42PdBYYyZIMH3A",
     authDomain: "uniformes-66281.firebaseapp.com",
+    databaseURL: "https://uniformes-66281-default-rtdb.firebaseio.com",
     projectId: "uniformes-66281",
-    storageBucket: "uniformes-66281.firebasestorage.app",
-    messagingSenderId: "263688770096",
     appId: "1:263688770096:web:24a72f9c8eeca8998a53f5"
   };
 
-  // Inicializa
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  const db = getDatabase(app);
 
-  // Pega ID do pedido
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
@@ -41,14 +58,15 @@
   if (!id) {
     statusDiv.innerHTML = "<p>Pedido não encontrado.</p>";
   } else {
-    // Escuta em tempo real
-    onSnapshot(doc(db, "pedidos-epis", id), (docSnap) => {
-      if (!docSnap.exists()) {
+    const pedidoRef = ref(db, `pedidos-epis/${id}`);
+
+    onValue(pedidoRef, (snapshot) => {
+      if (!snapshot.exists()) {
         statusDiv.innerHTML = "<p>Pedido não encontrado.</p>";
         return;
       }
 
-      const d = docSnap.data();
+      const d = snapshot.val();
 
       statusDiv.innerHTML = `
         <p>Status: <b>${d.status}</b></p>
