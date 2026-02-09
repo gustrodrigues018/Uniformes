@@ -7,34 +7,63 @@
 <body>
 
 <h2>Status do seu pedido</h2>
-<div id="status"></div>
+<div id="status">Carregando...</div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  // Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import {
+    getFirestore,
+    doc,
+    onSnapshot
+  } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH",
-  projectId: "SEU_PROJECT_ID",
-};
+  // 🔥 SUA configuração real
+  const firebaseConfig = {
+    apiKey: "AIzaSyD-637RqGj1lk9Bdgz5n42PdBYYyZIMH3A",
+    authDomain: "uniformes-66281.firebaseapp.com",
+    projectId: "uniformes-66281",
+    storageBucket: "uniformes-66281.firebasestorage.app",
+    messagingSenderId: "263688770096",
+    appId: "1:263688770096:web:24a72f9c8eeca8998a53f5"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  // Inicializa
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+  // Pega ID do pedido
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-onSnapshot(doc(db, "pedidos-epis", id), (docSnap) => {
-  const d = docSnap.data();
-  document.getElementById("status").innerHTML = `
-    <p>Status: <b>${d.status}</b></p>
-    <p>EPI: ${d.epi}</p>
-    <p>Tamanho: ${d.tamanho}</p>
-    <p>Quantidade: ${d.quantidade}</p>
-  `;
-});
+  const statusDiv = document.getElementById("status");
+
+  if (!id) {
+    statusDiv.innerHTML = "<p>Pedido não encontrado.</p>";
+  } else {
+    // Escuta em tempo real
+    onSnapshot(doc(db, "pedidos-epis", id), (docSnap) => {
+      if (!docSnap.exists()) {
+        statusDiv.innerHTML = "<p>Pedido não encontrado.</p>";
+        return;
+      }
+
+      const d = docSnap.data();
+
+      statusDiv.innerHTML = `
+        <p>Status: <b>${d.status}</b></p>
+        <p><strong>EPI:</strong> ${d.epi}</p>
+        <p><strong>Tamanho:</strong> ${d.tamanho}</p>
+        <p><strong>Quantidade:</strong> ${d.quantidade}</p>
+        ${
+          d.status === "Aprovado"
+            ? "<p>✅ Pedido aprovado. Retire no RH em até <b>2 horas</b>.</p>"
+            : "<p>⏳ Seu pedido está em análise pelo RH.</p>"
+        }
+      `;
+    });
+  }
 </script>
+
 </body>
 </html>
-
