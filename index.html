@@ -3,23 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <title>Solicitação de EPI</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      width: 320px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .msg {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2>Solicitar EPI</h2>
+<div class="card">
+  <h2>Solicitar EPI</h2>
 
-<form id="formPedido">
-  <input id="nome" placeholder="Nome" required>
-  <input id="matricula" placeholder="Matrícula" required>
-  <input id="setor" placeholder="Setor" required>
-  <input id="email" type="email" placeholder="E-mail" required>
+  <form id="form">
+    <input id="nome" placeholder="Nome" required>
+    <input id="matricula" placeholder="Matrícula" required>
+    <input id="epi" placeholder="EPI" required>
+    <input id="tamanho" placeholder="Tamanho" required>
+    <input id="quantidade" type="number" placeholder="Quantidade" required>
 
-  <input id="epi" placeholder="EPI" required>
-  <input id="tamanho" placeholder="Tamanho" required>
-  <input id="quantidade" type="number" placeholder="Quantidade" required>
+    <button type="submit">Enviar pedido</button>
+  </form>
 
-  <button type="submit">Enviar pedido</button>
-</form>
+  <div class="msg" id="msg"></div>
+</div>
 
 <script type="module" src="app.js"></script>
 </body>
