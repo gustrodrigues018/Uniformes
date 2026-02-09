@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Status do Pedido</title>
+</head>
+<body>
+
+<h2>Status do seu pedido</h2>
+<div id="status"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH",
+  projectId: "SEU_PROJECT_ID",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+onSnapshot(doc(db, "pedidos-epis", id), (docSnap) => {
+  const d = docSnap.data();
+  document.getElementById("status").innerHTML = `
+    <p>Status: <b>${d.status}</b></p>
+    <p>EPI: ${d.epi}</p>
+    <p>Tamanho: ${d.tamanho}</p>
+    <p>Quantidade: ${d.quantidade}</p>
+  `;
+});
+</script>
+</body>
+</html>
 
